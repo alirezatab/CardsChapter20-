@@ -41,13 +41,8 @@ struct SingleCardView: View {
       GeometryReader { proxy in
         CardDetailView(
           card: $card,
-          viewScale: Settings.calculateScale(proxy.size))
-          .modifier(CardToolbar(
-            currentModal: $currentModal,
-            card: $card))
-          .onDisappear {
-            card.save()
-          }
+          viewScale: Settings.calculateScale(proxy.size),
+          proxy: proxy)
         // 1 - Calculate the size of the card view given the available space.
           .frame(
             width: Settings.calculateSize(proxy.size).width,
@@ -56,8 +51,13 @@ struct SingleCardView: View {
           .clipped()
         // 3 - Make sure that CardDetailView takes up all of the space available to it. This will center the card view in the geometry reader.
           .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .modifier(CardToolbar(
+            currentModal: $currentModal,
+            card: $card))
+          .onDisappear {
+            card.save()
+          }
       }
-
     }
   }
 }
