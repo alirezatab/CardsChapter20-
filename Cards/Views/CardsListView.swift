@@ -35,32 +35,58 @@ import SwiftUI
 struct CardsListView: View {
   @EnvironmentObject var store: CardStore
   @Environment(\.scenePhase) private var scenePhase
+  @Environment(\.horizontalSizeClass) var horizontalSizeClass
+  @Environment(\.verticalSizeClass) var verticalSizeClass
   @State private var selectedCard: Card?
 
+  var thumbnailSize: CGSize {
+    var scale: CGFloat = 1
+    if verticalSizeClass == .regular, horizontalSizeClass == .regular {
+      scale = 1.5
+    }
+    return Settings.thumbnailSize * scale
+  }
+  
+  // This returns an array of GridItem — in this case, with one element — you can use this to tell the LazyVGrid the size and position of each row. This GridItem is adaptive, which means the grid will fit as many items as possible with the minimum size provided.
+  var columns: [GridItem] {
+    [
+      GridItem(.adaptive(
+        minimum: thumbnailSize.width))
+    ]
+  }
+  
   var body: some View {
     VStack {
-      list
-        .fullScreenCover(item: $selectedCard) { card in
-          if let index = store.index(for: card) {
-            SingleCardView(card: $store.cards[index])
-              .onChange(of: scenePhase) { newScenePhase in
-                if newScenePhase == .inactive {
-                  store.cards[index].save()
-                }
-              }
-          } else {
-            fatalError("Unable to locate selected card")
-          }
+      // You place these two views in a Group so that fullScreenCover(item:onDismiss:content:) modifies both views.
+      Group {
+        if store.cards.isEmpty {
+          inititalView
+        } else {
+          list
         }
-      Button("Add") {
-        selectedCard = store.addCard()
       }
+      .fullScreenCover(item: $selectedCard) { card in
+        if let index = store.index(for: card) {
+          SingleCardView(card: $store.cards[index])
+            .onChange(of: scenePhase) { newScenePhase in
+              if newScenePhase == .inactive {
+                store.cards[index].save()
+              }
+            }
+        } else {
+          fatalError("Unable to locate selected card")
+        }
+      }
+      createButton
     }
+    .background(
+      Color("background")
+        .ignoresSafeArea())
   }
 
   var list: some View {
     ScrollView(showsIndicators: false) {
-      VStack {
+      LazyVGrid(columns: columns, spacing: 30) {
         ForEach(store.cards) { card in
           CardThumbnail(card: card)
             .contextMenu {
@@ -70,12 +96,53 @@ struct CardsListView: View {
                 Label("Delete", systemImage: "trash")
               }
             }
+            .frame(
+              width: thumbnailSize.width,
+              height: thumbnailSize.height)
             .onTapGesture {
               selectedCard = card
             }
         }
       }
     }
+    .padding(.top, 20)
+  }
+  
+  var inititalView: some View {
+    VStack {
+      Spacer()
+      let card = Card(
+        backgroundColor: Color(uiColor: .systemBackground))
+      ZStack {
+        CardThumbnail(card: card)
+        Image(systemName: "plus.circle.fill")
+          .font(.largeTitle)
+      }
+      .frame(
+        width: thumbnailSize.width * 1.2,
+        height: thumbnailSize.height * 1.2)
+      .onTapGesture {
+        selectedCard = store.addCard()
+      }
+      
+      Spacer()
+    }
+  }
+  
+  var createButton: some View {
+    // 1 - Create a simple button using a Label format so that you can specify a system image. When tapped, you create a new card and assign it to selectedCard. When selectedCard changes, SingleCardView will show.
+    Button {
+      selectedCard = store.addCard()
+    } label: {
+      Label("Create New", systemImage: "plus")
+      // 2 - The button stretches all the way across the screen, less the padding.
+        .frame(maxWidth: .infinity)
+    }
+    .font(.system(size: 16, weight: .bold))
+    .padding([.top, .bottom], 10)
+    // 3 - The background color is in the asset catalog. You’ll customize the button text color shortly.
+    .background(Color("barColor"))
+    .accentColor(.white)
   }
 }
 

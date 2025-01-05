@@ -40,6 +40,7 @@
 		82FC263B29A46DB80054795C /* CardElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FC263A29A46DB80054795C /* CardElement.swift */; };
 		82FC263D29A46DD20054795C /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FC263C29A46DD20054795C /* Card.swift */; };
 		82FC263F29A46DF40054795C /* CardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FC263E29A46DF40054795C /* CardStore.swift */; };
+		C20C220C2D2A41E9009E76DB /* LayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20C220B2D2A41E9009E76DB /* LayoutView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		82FC263A29A46DB80054795C /* CardElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardElement.swift; sourceTree = "<group>"; };
 		82FC263C29A46DD20054795C /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		82FC263E29A46DF40054795C /* CardStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStore.swift; sourceTree = "<group>"; };
+		C20C220B2D2A41E9009E76DB /* LayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				821BAD0729A434FD00DF7122 /* CardThumbnail.swift */,
 				82BA5DE629A457ED00A8E097 /* ResizableView.swift */,
 				821BAD2B29A43DE400DF7122 /* Single Card Views */,
+				C20C220B2D2A41E9009E76DB /* LayoutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 			files = (
 				822A9CEC29A47833003EF057 /* CardDetailView.swift in Sources */,
 				82FC263B29A46DB80054795C /* CardElement.swift in Sources */,
+				C20C220C2D2A41E9009E76DB /* LayoutView.swift in Sources */,
 				8283CE9529A49A0C0002671D /* StickerModal.swift in Sources */,
 				821BAD0829A434FD00DF7122 /* CardThumbnail.swift in Sources */,
 				82BA5DEC29A459D200A8E097 /* Operators.swift in Sources */,

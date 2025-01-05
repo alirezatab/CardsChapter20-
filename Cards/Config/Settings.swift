@@ -38,7 +38,7 @@ enum Settings {
   static let thumbnailSize =
     CGSize(width: 150, height: 250)
   static let defaultElementSize =
-    CGSize(width: 250, height: 180)
+    CGSize(width: 800, height: 800)
   static let borderColor: Color = .blue
   static let borderWidth: CGFloat = 5
 }
@@ -93,4 +93,25 @@ extension Settings {
       height: cardLocation.y - Settings.cardSize.height * 0.5)
     return offset
   }
+  
+  // These methods calculate the size and scale of a view with the correct aspect ratio using a given size. This size comes from the view’s’ GeometryReader’s GeometryProxy.
+  static func calculateSize(_ size: CGSize) -> CGSize {
+    var newSize = size
+    let ratio = Settings.cardSize.width / Settings.cardSize.height
+    
+    if size.width < size.height {
+        newSize.height = min(size.height, newSize.width / ratio)
+        newSize.width = min(size.width, newSize.height * ratio)
+    } else {
+      newSize.width = min(size.width, newSize.height * ratio)
+      newSize.height = min(size.height, newSize.width / ratio)
+    }
+    return newSize
+  }
+
+  static func calculateScale(_ size: CGSize) -> CGFloat {
+    let newSize = calculateSize(size)
+    return newSize.width / Settings.cardSize.width
+  }
+  
 }

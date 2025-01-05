@@ -38,13 +38,26 @@ struct SingleCardView: View {
 
   var body: some View {
     NavigationStack {
-      CardDetailView(card: $card)
-        .modifier(CardToolbar(
-          currentModal: $currentModal,
-          card: $card))
-        .onDisappear {
-          card.save()
-        }
+      GeometryReader { proxy in
+        CardDetailView(
+          card: $card,
+          viewScale: Settings.calculateScale(proxy.size))
+          .modifier(CardToolbar(
+            currentModal: $currentModal,
+            card: $card))
+          .onDisappear {
+            card.save()
+          }
+        // 1 - Calculate the size of the card view given the available space.
+          .frame(
+            width: Settings.calculateSize(proxy.size).width,
+            height: Settings.calculateSize(proxy.size).height)
+        // 2 - The background color will spill out of the frame, so clip it.
+          .clipped()
+        // 3 - Make sure that CardDetailView takes up all of the space available to it. This will center the card view in the geometry reader.
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+      }
+
     }
   }
 }

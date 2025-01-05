@@ -35,6 +35,8 @@ import SwiftUI
 struct CardDetailView: View {
   @EnvironmentObject var store: CardStore
   @Binding var card: Card
+  
+  var viewScale: CGFloat = 1
 
   func isSelected(_ element: CardElement) -> Bool {
     store.selectedElement?.id == element.id
@@ -54,7 +56,9 @@ struct CardDetailView: View {
           .elementContextMenu(
             card: $card,
             element: $element)
-          .resizableView(transform: $element.transform)
+          .resizableView(
+            transform: $element.transform,
+            viewScale: viewScale)
           .frame(
             width: element.transform.size.width,
             height: element.transform.size.height)
